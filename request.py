@@ -7,8 +7,6 @@ from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 
-logging.basicConfig(level=logging.DEBUG)
-
 class XiaomiError(RuntimeError):
     def __init__(self, message, code):
         super().__init__(message)
@@ -56,7 +54,7 @@ class Auth():
         logging.debug("auth data %s", self.__dict__)
         if response.json()["S"] != "OK":
             raise XiaomiError("redir gave not-ok json", 5)
-        self.pcid = str(uuid.uuid4())
+        self.pcid = "wb_" + str(uuid.uuid4())
         return True
 
 class UnlockRequest:
@@ -71,7 +69,7 @@ class UnlockRequest:
             if isinstance(v, str):
                 v = v.encode("utf-8")
             elif not isinstance(v, bytes):
-                v = json.dumps(v).encode("utf-8")
+                v = b64encode(json.dumps(v).encode("utf-8"))
             if isinstance(k, str):
                 k = k.encode("utf-8")
             self.params[k] = v
@@ -118,21 +116,3 @@ class UnlockRequest:
         logging.debug("query returned %s", data.decode("utf-8"))
         logging.debug(json.loads(data))
         return data
-auth = Auth()
-
-auth.login_tui("unlockApi")
-logging.debug(auth.__dict__)
-data = {
-  "clientId":"100",
-  "clientVersion":"3.3.827.31",
-  "language":"en",
-  "pcId":hashlib.md5(auth.pcid.encode("utf-8")).hexdigest(),
-  "region":"",
-  "uid":auth.userid
-}
-r = UnlockRequest(auth, "unlock.update.miui.com", "/api/v3/unlock/userinfo", {
-    "appId":"1",
-    "data":data
-})
-r.add_nonce()
-logging.debug(r.run())
