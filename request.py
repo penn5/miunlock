@@ -33,7 +33,7 @@ class Auth():
             if data["code"] == 70016:
                 raise UserError("Not signed in.", 3)
             else:
-                raise XiaomiError("Account server gave unknown code {}, chinese desc is {}".format(data["code"], data["desc"]))
+                raise XiaomiError("Account server gave unknown code {}, chinese desc is {}".format(data["code"], data["desc"]), 4)
         self.ssecurity = data["ssecurity"]
         self.psecurity = data["psecurity"]
         self.userid = data["userId"]
@@ -105,6 +105,10 @@ class UnlockRequest:
         self.encrypt()
         self.add_signature()
         logging.debug(self.params)
+        data = json.loads(self.send())
+        if data["code"] != 0:
+            logging.error("invalid code != 0: %s", data[code])
+            raise XiaomiError("Invalid code {}".format(data[code]), 6)
         return json.loads(self.send())
     def send(self):
         response = requests.request(self.method, Url(scheme="https", host=self.host, path=self.path).url, data=self.params, headers={"User-Agent":"XiaomiPCSuite"}, cookies=self.auth.cookies)
@@ -114,5 +118,4 @@ class UnlockRequest:
         logging.debug(response.text)
         data = self._decrypt(response.text)
         logging.debug("query returned %s", data.decode("utf-8"))
-        logging.debug(json.loads(data))
         return data
