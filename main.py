@@ -1,4 +1,4 @@
-import logging, hashlib, io
+import logging, hashlib, io, time
 from request import Auth, UnlockRequest
 
 logging.basicConfig(level=logging.WARNING)
@@ -85,7 +85,9 @@ logging.debug(data)
 
 if use_fastboot:
     print("Acquired token! Preparing for unlocking...")
+    input("Press Ctrl-C to cancel, or enter to continue. ")
     fdev.Download(io.BytesIO(bytes.fromhex(data["encryptData"])), len(bytes.fromhex(data["encryptData"])))
+    time.sleep(0.5)
     fdev.Oem("unlock")
 else:
     print("Acquired token!")
