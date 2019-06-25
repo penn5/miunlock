@@ -106,7 +106,7 @@ class UnlockRequest:
         self.add_signature()
         logging.debug(self.params)
         data = json.loads(self.send())
-        if data["code"] != 0:
+        if data.get("code", 0) != 0:
             logging.error("invalid code != 0: %s", data[code])
             raise XiaomiError("Invalid code {}".format(data[code]), 6)
         return json.loads(self.send())
