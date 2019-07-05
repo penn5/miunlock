@@ -107,8 +107,8 @@ class UnlockRequest:
         logging.debug(self.params)
         data = json.loads(self.send())
         if data.get("code", 0) != 0:
-            logging.error("invalid code != 0: %s", data.get(code, None))
-            raise XiaomiError("Invalid code {}".format(data.get(code, None)), 6)
+            logging.error("invalid code != 0: %s", data.get("code", None))
+            raise XiaomiError("Invalid code {}".format(data.get("code", None)), 6)
         return json.loads(self.send())
     def send(self):
         response = requests.request(self.method, Url(scheme="https", host=self.host, path=self.path).url, data=self.params, headers={"User-Agent":"XiaomiPCSuite"}, cookies=self.auth.cookies)
