@@ -6,6 +6,7 @@ import http.cookiejar as cookielib
 from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
+from strings import STRINGS
 
 class XiaomiError(RuntimeError):
     def __init__(self, message, code):
@@ -108,6 +109,7 @@ class UnlockRequest:
         data = json.loads(self.send())
         if data.get("code", 0) != 0:
             logging.error("invalid code != 0: %s", data.get("code", None))
+            raise XiaomiError(STRINGS["en"].get(data.get("code", -1), STRINGS["en"][-1]).format(**data), data.get("code", 6))
             raise XiaomiError("Invalid code {}".format(data.get("code", None)), 6)
         return json.loads(self.send())
     def send(self):
