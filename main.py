@@ -14,7 +14,7 @@ try:
     except DeviceNotFoundError:
         logging.warning("No device detected in fastboot. Using manual mode.")
 except ImportError:
-    logging.warning("python-adb fastboot interface unavailable.")
+    logging.warning("python-adb fastboot interface unavailable. Using manual mode.")
 
 auth = Auth()
 auth.login_tui("unlockApi")
