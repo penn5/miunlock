@@ -108,7 +108,7 @@ class UnlockRequest:
         logging.debug(self.params)
         data = json.loads(self.send())
         if data.get("code", 0) != 0:
-            logging.error("invalid code != 0: %s", data.get("code", None))
+            logging.error("invalid code != 0: %s", data)
             raise XiaomiError(STRINGS["en"].get(data.get("code", -1), STRINGS["en"][-1]).format(**data), data.get("code", 6))
 #            raise XiaomiError("Invalid code {}".format(data.get("code", None)), 6)
         return json.loads(self.send())
