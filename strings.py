@@ -14,7 +14,7 @@ STRINGS = {
     20033:"User portrait is invalid, make sure a face is present",
     20034:"This account cannot unlock devices.",
     20035:"Client version too old (2x)",
-    20036:"Please wait {data:02} hours.",
+    20036:"Please wait {data!r} hours.",
     20037:"You have unlocked too many devices with this account.",
     20041:"Please associate a phone number with the account first at https://account.xiaomi.com",
   }
