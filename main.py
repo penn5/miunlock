@@ -73,7 +73,7 @@ r = UnlockRequest(auth, "unlock.update.miui.com", "/api/v3/ahaUnlock", {
     "region":"",
     "deviceInfo":{
       "boardVersion":"",
-      "product":"cepheus",
+      "product":product,
       "socId":"",
       "deviceName":""
     },
